@@ -10,6 +10,7 @@ admin.autodiscover()
 admin.site.register(volunteer_dispatcher.models.Volunteer, admin.ModelAdmin)
 admin.site.register(volunteer_dispatcher.models.Incident, admin.ModelAdmin)
 admin.site.register(volunteer_dispatcher.models.IncidentType, admin.ModelAdmin)
+admin.site.register(volunteer_dispatcher.models.FieldReport, admin.ModelAdmin)
 
 urlpatterns = patterns('',
     # Examples:

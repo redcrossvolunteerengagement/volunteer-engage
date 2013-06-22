@@ -27,6 +27,9 @@ class HasLocation(models.Model) :
 class Volunteer (HasLocation) :
 	user = models.ForeignKey(django.contrib.auth.models.User, blank=True, null=True)
 
+	is_trainee = models.BooleanField(default=False)
+	is_dispatcher = models.BooleanField(default=False)
+
 	first_name = models.CharField(max_length=30, null=False)
 	last_name = models.CharField(max_length=40, null=False)
 
@@ -49,3 +52,13 @@ class Incident(HasLocation) :
 
 	def __unicode__(self) :
 		return '%s: %s' % (str(self.incident_type), self.dispatcher_initial_description[0:50])
+
+class FieldReport(models.Model) :
+	ts = models.BigIntegerField(blank=True, null=True)
+	volunteer = models.ForeignKey(Volunteer)
+	latitude = models.DecimalField(max_digits=10, decimal_places=6)
+	longitude = models.DecimalField(max_digits=10, decimal_places=6)
+	description = models.TextField()
+	read = models.BooleanField(default=False)
+
+	# it would be fancy later to make it so a field report could be linked to an incident after the fact, but nah.
