@@ -8,6 +8,10 @@ class HasLocation(models.Model) :
 	city = models.CharField(max_length=20, null=False)
 	state = models.CharField(max_length=2, null=False)
 	county = models.CharField(max_length=20, null=False)
+
+	addr1 = models.CharField(max_length=50, null=True, blank=True)
+	addr2 = models.CharField(max_length=50, null=True, blank=True)
+	addr3 = models.CharField(max_length=50, null=True, blank=True)
 	postcode = models.CharField(max_length=10, null=True, blank=True)
 
 	# current location if known, otherwise their home
