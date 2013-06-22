@@ -1,9 +1,7 @@
-<A name="toc1-0" title="volunteer-engage" />
 # volunteer-engage
 
 redcross volunteer engagement app
 
-<A name="toc1-5" title="Setup" />
 # Setup
 
 To set up, you have to create a virtualenv.
