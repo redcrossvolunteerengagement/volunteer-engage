@@ -1,8 +1,15 @@
+from django.contrib import admin
 from django.conf.urls import patterns, include, url
 
+import volunteer_dispatcher.models
+
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
+
+admin.site.register(volunteer_dispatcher.models.Volunteer, admin.ModelAdmin)
+admin.site.register(volunteer_dispatcher.models.Incident, admin.ModelAdmin)
+admin.site.register(volunteer_dispatcher.models.IncidentType, admin.ModelAdmin)
 
 urlpatterns = patterns('',
     # Examples:
@@ -13,5 +20,5 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
 )
