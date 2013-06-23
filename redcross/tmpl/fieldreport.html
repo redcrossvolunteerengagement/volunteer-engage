@@ -20,6 +20,7 @@ function disposition_change(disp) {
     $("#btn_file").attr({
       "class": 'btn btn-focus'
     });
+    initialize_maps();
   } else if (disp == "file") {
     $('#fr_view').hide();
     $('#fr_file').show();
@@ -36,6 +37,7 @@ function disposition_change(disp) {
 {% for fieldreport in fieldreports %}
 
 function initialize_{{fieldreport.sequence_id}}() {
+  {% if fieldreport.latitude %}
   var mapOptions = {
     zoom: 18,
     center: new google.maps.LatLng({{ fieldreport.latitude }},{{ fieldreport.longitude }}),
@@ -63,12 +65,23 @@ function initialize_{{fieldreport.sequence_id}}() {
     map.setZoom(8);
     map.setCenter(marker.getPosition());
   });
+  {% endif %}
 }
-
-google.maps.event.addDomListener(window, 'load', initialize_{{fieldreport.sequence_id}});
 
 {% endfor %}
 
+function initialize_maps() {
+
+{% for fieldreport in fieldreports %}
+
+initialize_{{fieldreport.sequence_id}}();
+
+
+{% endfor %}
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize_maps);
 </script>
 <div class="row-fluid">
 <div class="span12" align="right">
@@ -96,7 +109,7 @@ google.maps.event.addDomListener(window, 'load', initialize_{{fieldreport.sequen
  </div>
     <div style="clear:both"></div>
     <p> {{ fieldreport.description }} </p>
-{% if fieldreport.latitude%}
+{% if fieldreport.latitude %}
     <p>Lat/Lon: {{ fieldreport.latitude }}/{{ fieldreport.longitude }}</p>
 <div class="map_canvas" id="map{{fieldreport.sequence_id}}" ></div>
 {% endif %}
