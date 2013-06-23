@@ -75,6 +75,7 @@ def render_respond(request, tfilename, context_dict=None, do_csrf=False) :
 
   return http.HttpResponse(t.render(ctx))
 
+@csrf_protect
 def fieldreports_home(request) :
   d = {"title" : "Field Reports"}
   d['user_properties'] = user_properties(request)
@@ -83,6 +84,18 @@ def fieldreports_home(request) :
     d['fieldreport_disposition'] = 'view'
   else :
     d['fieldreport_disposition'] = 'file'
+
+  if 'action' in request.POST :
+    if not d['user_properties']['is_dispatcher'] :
+      return http.HttpResponse('Unauthorized', status=401)
+
+    if request.POST['action'] == 'mark_read' and 'fieldreport_id' in request.POST :
+      # TODO handle bad value for field report id well
+      fieldreport_id = long(request.POST['fieldreport_id'])
+      fieldreport = models.FieldReport.objects.get(id=fieldreport_id)
+      fieldreport.read = True
+      fieldreport.read_ts = long(time.time())
+      fieldreport.save()
 
   add_open_fieldreports(d)
 

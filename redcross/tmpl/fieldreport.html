@@ -33,14 +33,6 @@ function disposition_change(disp) {
   }
 }
 
-
-//$(document).ready(function(){
-//var temp=$("timestamp").text;
-//console.log(typeof(temp));
-//$('.timestamp').text(temp);
-
-//});
-
 {% for fieldreport in fieldreports %}
 
 function initialize_{{fieldreport.sequence_id}}() {
@@ -92,7 +84,6 @@ google.maps.event.addDomListener(window, 'load', initialize_{{fieldreport.sequen
 
 {% for fieldreport in fieldreports %} 
 <script>
-//initialize();
 
 </script>
 
@@ -101,7 +92,8 @@ google.maps.event.addDomListener(window, 'load', initialize_{{fieldreport.sequen
 <h1> {{ fieldreport.sequence_id }} {{ fieldreport.volunteer }} </h1>
 <div class="row-fluid">
     <div style="margin-left:2em">
-    <div>{{fieldreport.ts}}</div>
+    <div style="clear:both;"> {{fieldreport.ts}} &nbsp; &nbsp; <form action="/fieldreport/" method="POST">{% csrf_token %}<input type="hidden" name="action" value="mark_read" /><input type="hidden" name="fieldreport_id" value="{{fieldreport.id}}" /><input type="submit" value="Mark Read" /></form>
+ </div>
     <div style="clear:both"></div>
     <p> {{ fieldreport.description }} </p>
 {% if fieldreport.latitude%}

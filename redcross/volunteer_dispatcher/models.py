@@ -60,5 +60,5 @@ class FieldReport(models.Model) :
 	longitude = models.DecimalField(max_digits=10, decimal_places=6, blank=True, null=True)
 	description = models.TextField()
 	read = models.BooleanField(default=False)
-
+        read_ts = models.BigIntegerField(blank=True, null=True)
 	# it would be fancy later to make it so a field report could be linked to an incident after the fact, but nah.
