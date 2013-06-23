@@ -4,6 +4,7 @@ import threading
 
 TW_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TW_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TW_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 
 class Notifier(object) :
   def __init__(self, trc, returner_func) :
@@ -12,6 +13,9 @@ class Notifier(object) :
 
   def __del__(self) :
     self.returner_func(self.trc)
+
+  def send(self, phone_number, message) :
+    return self.trc.sms.messages.create(to=phone_number, from_=TW_PHONE_NUMBER, body=message)
 
 class Notifiers(object) :
   client_set = list()

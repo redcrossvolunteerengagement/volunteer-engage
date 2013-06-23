@@ -49,6 +49,8 @@ class IncidentType(models.Model) :
 class Incident(HasLocation) :
 	incident_type = models.ForeignKey(IncidentType)
 	dispatcher_initial_description = models.TextField()
+	required_responders = models.IntegerField(default=1)
+	required_trainees = models.IntegerField(default=1)
 
 	def __unicode__(self) :
 		return '%s: %s' % (str(self.incident_type), self.dispatcher_initial_description[0:50])
