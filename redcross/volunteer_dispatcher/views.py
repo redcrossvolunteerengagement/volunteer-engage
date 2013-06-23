@@ -60,6 +60,11 @@ def fieldreports_home(request) :
   d = {"title" : "Field Reports"}
   d['user_properties'] = user_properties(request)
 
+  if d['user_properties']['is_dispatcher'] :
+    d['fieldreport_disposition'] = 'view'
+  else :
+    d['fieldreport_disposition'] = 'file'
+
   return render_respond(request, "tmpl/fieldreport.html", d)
 
 @csrf_protect
@@ -106,6 +111,7 @@ def fieldreports_create(request) :
     fieldreport.save()
 
     d['message'] = 'Report filed'
+    d['fieldreport_disposition'] = 'file'
 
     return render_respond(request, "tmpl/fieldreport.html", d)
   except :

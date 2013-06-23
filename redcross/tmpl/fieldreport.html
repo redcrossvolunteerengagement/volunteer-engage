@@ -1,16 +1,43 @@
 {% include "tmpl/header.html" %}
 
 {% if user_properties.logged_in %}
+
+<!--- buttons for selecting disposition of page --->
 	{% if user_properties.is_dispatcher %}
-		<h1> hello, viewing field reports </h1> <!--- XXX -->
-		<p>
-		Field reports go here!
-		</p>
+
+<script type="text/javascript">
+
+function disposition_change(disp) {
+  if (disp == "view") {
+    $('#fr_view').show();
+    $('#fr_file').hide();
+  } else if (disp == "file") {
+    $('#fr_view').hide();
+    $('#fr_file').show();
+  }
+}
+</script>
+
+<div class="row-fluid">
+<div class="span12" align="right">
+<button onClick="disposition_change('view');" class="btn btn-focus">Field Reports</button>
+<button onClick="disposition_change('file');" class="btn btn-success">Create a Report</button>
+</div>
+</div>
+
+
+<!--- for viewing... --->
+
+<div id="fr_view" style="clear:both" >
+
+HELLO HELLO HI WHAT
+</div>
+
 	{% endif %}
 
 <!--- section for filing reports --->
 	{% if user_properties.is_responder %}
-	<div style="clear:both"></div>
+	<div id="fr_file" style="clear:both">
 	<h4>Field Report</h4>
 	<p>Input your crisis observations to our form and connect with Disaster Action Team (DAT) dispatchers to ensure an effective Red Cross response. Use your judgment and volunteer training to ensure that all relevant situational information is recorded and off-topic points are avoided. By quickly passing along your observations to dispatchers, you will not only facilitate their coordination of the disaster response but also enable other volunteers who are in the area to contribute towards the effort. This feature will ensure that whether you are participating in a crisis response or happen to encounter a crisis situation unfolding, your vital knowledge will not be lost.</p>
 	<form method="post" action="/fieldreport/create">
@@ -25,6 +52,11 @@
 	</form>
 
 	</div>
+</div>
+
+<script type="text/javascript" >
+disposition_change('{{ fieldreport_disposition }}');
+</script>
 	{% endif %}
 
 
