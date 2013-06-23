@@ -48,3 +48,5 @@ def fieldreports_home(request) :
 
   return render_respond(request, "tmpl/fieldreports_home.html", d)
 
+def login(request):
+	return render_respond(request, 'tmpl/login.html')
