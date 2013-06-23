@@ -69,7 +69,18 @@ def fieldreports_home(request) :
   else :
     d['fieldreport_disposition'] = 'file'
 
+  add_open_fieldreports(d)
+
   return render_respond(request, "tmpl/fieldreport.html", d)
+
+def add_open_fieldreports(d) :
+  if not d['user_properties']['is_dispatcher'] :
+    d['fieldreports'] = []
+  else :
+    reports = list(models.FieldReport.objects.filter(read=False))
+    for i in range(len(reports)) :
+      reports[i].sequence_id = i + 1
+    d['fieldreports'] = reports
 
 @csrf_protect
 def fieldreports_mark_read(request) :
@@ -116,7 +127,7 @@ def fieldreports_create(request) :
 
     d['message'] = 'Report filed'
     d['fieldreport_disposition'] = 'file'
-
+    add_open_fieldreports(d)
     return render_respond(request, "tmpl/fieldreport.html", d)
   except :
     print traceback.format_exc()

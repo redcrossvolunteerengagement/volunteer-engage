@@ -30,7 +30,21 @@ function disposition_change(disp) {
 
 <div id="fr_view" style="clear:both" >
 
-HELLO HELLO HI WHAT
+
+{% for fieldreport in fieldreports %} 
+
+<div id="fieldreport_{{ fieldreport.id }}">
+
+<h1> Report {{ fieldreport.sequence_id }} </h1>
+By: {{ fieldreport.volunteer }} 
+When: {{ fieldreport.ts }}
+Lat/Lon: {{ fieldreport.latitude }}/{{ fieldreport.longitude }}
+<p> {{ fieldreport.description }} </p>
+
+</div>
+
+{% endfor %}
+
 </div>
 
 	{% endif %}
