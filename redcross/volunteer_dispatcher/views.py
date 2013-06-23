@@ -1,7 +1,11 @@
 from django import http
+from django.contrib import auth
 from django.template import RequestContext, Context, loader
 from django.views.decorators.csrf import csrf_protect
-import django.contrib.auth
+from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect
+from django.core.context_processors import csrf
+
 
 import time
 import models
@@ -113,4 +117,10 @@ def fieldreports_create(request) :
     return http.HttpResponse('Unhandled error', status=500)
 
 def login(request):
-	return render_respond(request, 'tmpl/login.html')
+	return render_respond(request,'tmpl/login.html')
+
+def logout(request):
+	auth.logout(request)
+	return render_response(request, 'tmpl/home.html')
+
+
