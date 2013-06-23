@@ -8,24 +8,29 @@
 		</p>
 	{% endif %}
 
+<!--- section for filing reports --->
 	{% if user_properties.is_responder %}
 	<div style="clear:both"></div>
-<h4>Field Report</h4>
-<p>Input your crisis observations to our form and connect with Disaster Action Team (DAT) dispatchers to ensure an effective Red Cross response. Use your judgment and volunteer training to ensure that all relevant situational information is recorded and off-topic points are avoided. By quickly passing along your observations to dispatchers, you will not only facilitate their coordination of the disaster response but also enable other volunteers who are in the area to contribute towards the effort. This feature will ensure that whether you are participating in a crisis response or happen to encounter a crisis situation unfolding, your vital knowledge will not be lost.</p>
-<form method="post" action="/fieldreport/create">
-{% csrf_token %}
-<textarea rows="5" class="span12" name="description" id="description"></textarea>
-<div style="clear:both;"></div>
-{% if message %}
-<div class="alert alert-success"> {{ message }} </div>
-{% endif %}
-<button type="submit" class="btn btn-primary">Submit</button>
-
-</form>
-
-
-</div>
+	<h4>Field Report</h4>
+	<p>Input your crisis observations to our form and connect with Disaster Action Team (DAT) dispatchers to ensure an effective Red Cross response. Use your judgment and volunteer training to ensure that all relevant situational information is recorded and off-topic points are avoided. By quickly passing along your observations to dispatchers, you will not only facilitate their coordination of the disaster response but also enable other volunteers who are in the area to contribute towards the effort. This feature will ensure that whether you are participating in a crisis response or happen to encounter a crisis situation unfolding, your vital knowledge will not be lost.</p>
+	<form method="post" action="/fieldreport/create">
+	{% csrf_token %}
+	<textarea rows="5" class="span12" name="description" id="description"></textarea>
+	<div style="clear:both;"></div>
+	{% if message %}
+	<div class="alert alert-success"> {{ message }} </div>
 	{% endif %}
+	<button type="submit" class="btn btn-primary">Submit</button>
+
+	</form>
+
+	</div>
+	{% endif %}
+
+
+
+
+
 {% else %}
 Sorry, you must log in.
 {% endif %}
