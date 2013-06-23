@@ -157,11 +157,8 @@ def fieldreports_create_core(request, csrf_unsafe) :
     print traceback.format_exc()
     return http.HttpResponse('Unhandled error', status=500)
 
-def login(request):
-	return render_respond(request,'tmpl/login.html')
-
-def logout(request):
-	auth.logout(request)
-	return render_response(request, 'tmpl/home.html')
-
-
+@csrf_protect
+def home(request) :
+  d = {}
+  d['user_properties'] = user_properties(request)
+  return render_respond(request, "tmpl/home.html", d)
