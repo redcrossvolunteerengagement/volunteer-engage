@@ -1,5 +1,3 @@
-# Create your views here.
-
 from django import http
 from django.template import RequestContext, Context, loader
 from django.views.decorators.csrf import csrf_protect
@@ -108,3 +106,6 @@ def fieldreports_create(request) :
   except :
     print traceback.format_exc()
     return http.HttpResponse('Unhandled error', status=500)
+
+def login(request):
+	return render_respond(request, 'tmpl/login.html')
