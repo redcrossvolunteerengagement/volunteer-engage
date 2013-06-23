@@ -78,6 +78,7 @@ def add_open_fieldreports(d) :
     d['fieldreports'] = []
   else :
     reports = list(models.FieldReport.objects.filter(read=False))
+    reports.reverse()
     for i in range(len(reports)) :
       reports[i].sequence_id = i + 1
     d['fieldreports'] = reports
