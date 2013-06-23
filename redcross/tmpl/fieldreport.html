@@ -1,11 +1,6 @@
 {% include "tmpl/header.html" %}
 
 {% if user_properties.logged_in %}
-        {% if message %}
-		<blink><h1><marquee> {{ message }} </marquee></h1></blink>
-        {% endif %}
-
-
 	{% if user_properties.is_dispatcher %}
 		<h1> hello, viewing field reports </h1> <!--- XXX -->
 		<p>
@@ -21,7 +16,11 @@
 {% csrf_token %}
 <textarea rows="5" class="span12" name="description" id="description"></textarea>
 <div style="clear:both;"></div>
+{% if message %}
+<div class="alert alert-success"> {{ message }} </div>
+{% endif %}
 <button type="submit" class="btn btn-primary">Submit</button>
+
 </form>
 
 
