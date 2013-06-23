@@ -33,5 +33,5 @@ urlpatterns = patterns('',
     url(r'^fieldreport/mark_read$', 'volunteer_dispatcher.views.fieldreports_mark_read'), # list field reports or file them
     url(r'^fieldreport/create$', 'volunteer_dispatcher.views.fieldreports_create'), # create a field report
     #url(r'^fieldreport/mark_read$', 'volunteer_dispatcher.views.fieldreports_mark_read'), # list field reports or file them
-    url(r'login/', 'django.contrib.auth.views.login', {'template_name':'tmpl/login.html'}, name='login')
+    url(r'login/$', 'django.contrib.auth.views.login', {'template_name':'tmpl/login.html'}, name='login')
 )
