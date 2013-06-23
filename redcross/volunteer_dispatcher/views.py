@@ -1,10 +1,13 @@
 from django import http
 from django.contrib import auth
 from django.template import RequestContext, Context, loader
-from django.views.decorators.csrf import csrf_protect
+
+# save us from csrf!
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.core.context_processors import csrf
+
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from django.core.context_processors import csrf
 
 
 import time
@@ -13,12 +16,19 @@ import decimal
 import pprint
 import traceback
 
-def user_properties(request) :
+def user_properties(request, csrf_unsafe=False) :
   user = None
   if request.user.is_authenticated() :
+    if csrf_unsafe :
+      print 'user_properties: pre-authenticated requests must be csrf safe'
+      return http.HttpResponse('Unauthorized', status=401)
     user = request.user
+    print 'user_properties: authenticated'
   elif ('username' in request.POST) and ('password' in request.POST) :
-    user = django.contrib.auth.authenticate(username, password)
+    print 'user_properties: trying to authenticate'
+    user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])
+  else :
+    print 'user_properties: was not logged in and did not send username and password, they have no rights'
 
   return user_properties_core(user)
 
@@ -47,7 +57,7 @@ def user_properties_core(user) :
 
   return d
 
-def render_respond(request, tfilename, context_dict=None) :
+def render_respond(request, tfilename, context_dict=None, do_csrf=False) :
   t = loader.get_template(tfilename)
 
   cd = {
@@ -58,7 +68,11 @@ def render_respond(request, tfilename, context_dict=None) :
   if 'title' not in cd :
     cd['title'] = "REDCROSS"
   
-  return http.HttpResponse(t.render(RequestContext(request, cd)))
+  ctx = RequestContext(request, cd)
+  if do_csrf :
+    ctx.update(csrf(request))
+
+  return http.HttpResponse(t.render(ctx))
 
 def fieldreports_home(request) :
   d = {"title" : "Field Reports"}
@@ -97,11 +111,20 @@ def fieldreports_mark_read(request) :
 
   return render_respond(request, "tmpl/fieldreport.html", d)
 
+@csrf_exempt
+def fieldreports_create_auth(request) :
+  return fieldreports_create_core(request, True)
+
 @csrf_protect
 def fieldreports_create(request) :
+  return fieldreports_create_core(request, False)
+
+def fieldreports_create_core(request, csrf_unsafe) :
+  pprint.pprint(request.POST) 
+
   try :
     d = {}
-    d['user_properties'] = user_properties(request)
+    d['user_properties'] = user_properties(request, csrf_unsafe=csrf_unsafe)
 
     if not d['user_properties']['is_responder'] :
       return http.HttpResponse('Unauthorized', status=401)
@@ -111,8 +134,8 @@ def fieldreports_create(request) :
     latitude = None
     longitude = None
     try :
-      latitude = float(request.POST['lat'])
-      longitude = float(request.POST['lon'])
+      latitude = float(request.POST['latitude'])
+      longitude = float(request.POST['longitude'])
     except KeyError :
       print 'oh no, no location known :('
     except decimal.InvalidOperation :
@@ -129,7 +152,7 @@ def fieldreports_create(request) :
     d['message'] = 'Report filed'
     d['fieldreport_disposition'] = 'file'
     add_open_fieldreports(d)
-    return render_respond(request, "tmpl/fieldreport.html", d)
+    return render_respond(request, "tmpl/fieldreport.html", d, do_csrf=True)
   except :
     print traceback.format_exc()
     return http.HttpResponse('Unhandled error', status=500)
