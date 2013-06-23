@@ -34,7 +34,9 @@ margin-top: 1em;
     <ul class="nav" align="center">
       <li class="active"><a href="#" style="color:red;">Field Report</a></li>
       <li><a href="#">Incident Log</a></li>
+      {% if user_properties.is_dispatcher %}
       <li><a href="#">Dispatch an Incident</a></li>
+      {% endif %}
     </ul>
   </div>
 </div>
