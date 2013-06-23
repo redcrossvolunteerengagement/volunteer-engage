@@ -22,7 +22,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^login/$', 'django.contrib.auth.views.login', {
-    'login': 'myapp/login.html'
+    url(r'^login/$', 'django.contrib.auth.views', {
+    'login': 'templates/login.html'
 	}),
 )
