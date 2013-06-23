@@ -106,6 +106,7 @@ ROOT_URLCONF = 'redcross.urls'
 WSGI_APPLICATION = 'redcross.wsgi.application'
 
 TEMPLATE_DIRS = (
+    '~/volunteer-engage/redcross'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -121,7 +122,7 @@ INSTALLED_APPS = (
     'volunteer_dispatcher',
     'south',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
