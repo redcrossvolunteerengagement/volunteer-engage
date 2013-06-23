@@ -12,6 +12,7 @@ import models
 import decimal
 import pprint
 import traceback
+import datetime
 
 def user_properties(request) :
   user = None
@@ -80,6 +81,7 @@ def add_open_fieldreports(d) :
     reports = list(models.FieldReport.objects.filter(read=False))
     for i in range(len(reports)) :
       reports[i].sequence_id = i + 1
+      reports[i].ts=datetime.datetime.fromtimestamp(reports[i].ts);
     d['fieldreports'] = reports
 
 @csrf_protect
