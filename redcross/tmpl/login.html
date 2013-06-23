@@ -1,18 +1,17 @@
-
+{% include "tmpl/header1.html" %}
 {% load url from future %}
 <html>
 <body>
-    {%if form.errors %}
-    <p> Invalid username/password combination, please try again </p>
-    {% endif %}
-
-    <h1>Welcome to the Red Cross volunteers' page</h1>
+    <h1>The Red Cross Volunteers' Page</h1>
     <form action= {% url "login" %} method="post">
     {% csrf_token %}
         {{form.username.label_tag}}{{form.username}}
         {{form.password.label_tag}}{{form.password}}
         <input type="submit" id="submit" name="submit" value="Sign in" />
-        <input type="hidden" name="next" value="{{ next }}" />        
+        <input type="hidden" name="next" value="{{ next }}" />   
+    {%if form.errors %}
+    <p> Invalid username/password combination, please try again </p>
+    {% endif %}     
     </form>
     <a href="password_reset/" id="forgot"> forgot username/password</a><br />
     <a href="register" id="new">new user</a>
