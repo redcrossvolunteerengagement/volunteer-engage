@@ -33,11 +33,7 @@ margin-top: 1em;
 <div class="navbar">
   <div class="navbar-inner">
     <ul class="nav" align="center">
-          {% if not user_properties.logged_in %}
-          <li class="active" onclick="window.location.href = '/login/';" ><a href="#" style="color:blue;">Login</a></li>
-          {% else %}
-            <li class="active" onclick="window.location.href = '/logout/';" ><a href="#" style="color:blue;">Logout</a></li>
-          {% endif %} 
+
 
 {% if user_properties.logged_in %}
       <li ><a href="/fieldreport/">Field Report</a></li>
@@ -46,6 +42,12 @@ margin-top: 1em;
       <li><a href="#">Dispatch an Incident</a></li>
       {% endif %}
 {% endif %}
+
+          {% if not user_properties.logged_in %}
+          <li class="active" onclick="window.location.href = '/login/';" ><a href="#" style="color:blue;">Login</a></li>
+          {% else %}
+      <li ><a href="/logout/">Logout</a></li>
+          {% endif %} 
     </ul>
   </div>
 </div>
