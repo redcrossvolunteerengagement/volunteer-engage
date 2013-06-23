@@ -102,6 +102,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'redcross.urls'
+LOGIN_REDIRECT_URL = '/'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'redcross.wsgi.application'
