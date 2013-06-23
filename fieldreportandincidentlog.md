@@ -4,6 +4,6 @@ Input your crisis observations to our form and connect with Disaster Action Team
 ***
 
 ## **Incident Log**
-See how volunteers in your immediate area or people who are responding to crises all over the country are contributing to Red Cross's humanitarian mission.  You will receive a log of all the incidents that happen during a given day that Red Cross volunteers like yourself have responded to. Incidents may range from responding to a major natural disaster like a hurricane to helping out a family who lost their home to a fire. See what ordinary people from diverse backgrounds can accomplish with extraordinary determination and become more informed about the Red Cross community.  
+See how volunteers in your immediate area or people who are responding to crises all over the country are contributing to Red Cross's humanitarian mission.  You will receive a log of all the incidents that happen during a given day that Red Cross volunteers like yourself have responded to. Incidents may range from a major natural disaster such as a hurricane to a fire that has destroyed a single family's home. See what ordinary people from diverse backgrounds can accomplish with extraordinary determination and become more informed about the Red Cross community.  
 
 ***

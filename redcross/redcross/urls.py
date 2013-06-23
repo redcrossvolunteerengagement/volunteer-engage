@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.conf.urls import patterns, include, url
 
 import volunteer_dispatcher.models
+import volunteer_dispatcher.views
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -25,4 +26,7 @@ urlpatterns = patterns('',
     url(r'^login/$', 'django.contrib.auth.views', {
     'login': 'templates/login.html'
 	}),
+    url(r'^fieldreport/', 'volunteer_dispatcher.views.fieldreports_home'), # list field reports or file them
+    #url(r'^fieldreport/mark_read$', 'volunteer_dispatcher.views.fieldreports_mark_read'), # list field reports or file them
+
 )
