@@ -101,6 +101,26 @@ def fieldreports_home(request) :
 
   return render_respond(request, "tmpl/fieldreport.html", d)
 
+@csrf_protect
+def incidents_home(request) :
+  d = {"title" : "Dispatch Incident"}
+  d['user_properties'] = user_properties(request)
+
+  if not d['user_properties']['is_dispatcher'] :
+    return http.HttpResponse('Unauthorized', status=401)
+
+  if 'action' in request.POST :
+    if request.POST['action'] == 'dispatch_automatically' and 'incident_id' in request.POST :
+      # TODO handle bad value for field report id well
+      incident_id = long(request.POST['incident_id'])
+
+      # XXX this is incomplete change it
+      incident = models.Incident.objects.get(id=incident_id)
+
+  add_open_incidents(d)
+
+  return render_respond(request, "tmpl/incident.html", d)
+
 def add_open_fieldreports(d) :
   if not d['user_properties']['is_dispatcher'] :
     d['fieldreports'] = []
@@ -111,6 +131,18 @@ def add_open_fieldreports(d) :
       reports[i].sequence_id = i + 1
       reports[i].ts=datetime.datetime.fromtimestamp(reports[i].ts);
     d['fieldreports'] = reports
+
+
+def add_open_incidents(d) :
+  if not d['user_properties']['is_dispatcher'] :
+    d['incidents'] = []
+  else :
+    incidents = list(models.Incident.objects.filter(is_open=True))
+    incidents.reverse()
+    for i in range(len(incidents)) :
+      incidents[i].sequence_id = i + 1
+      #incidents[i].ts=datetime.datetime.fromtimestamp(reports[i].ts);
+    d['incidents'] = incidents
 
 @csrf_protect
 def fieldreports_mark_read(request) :

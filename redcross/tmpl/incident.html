@@ -1,0 +1,119 @@
+{% include "tmpl/header.html" %}
+
+{% if user_properties.logged_in %}
+
+
+
+	{% if user_properties.is_dispatcher %}
+<script src="/site_media/moment/moment.js"></script>
+<link href="/site_media/googleapi/default.css" rel="stylesheet">
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script type="text/javascript">
+
+{% for incident in incidents %}
+
+function initialize_{{incident.sequence_id}}() {
+  {% if incident.latitude %}
+  var mapOptions = {
+    zoom: 18,
+    center: new google.maps.LatLng({{ incident.latitude }},{{ incident.longitude }}),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  var map = new google.maps.Map(document.getElementById('map{{incident.sequence_id}}'),
+      mapOptions);
+
+  var marker = new google.maps.Marker({
+    position: map.getCenter(),
+    map: map,
+    title: 'Click to zoom'
+  });
+
+  google.maps.event.addListener(map, 'center_changed', function() {
+    // 3 seconds after the center of the map has changed, pan back to the
+    // marker.
+    window.setTimeout(function() {
+      map.panTo(marker.getPosition());
+    }, 3000);
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    map.setZoom(8);
+    map.setCenter(marker.getPosition());
+  });
+  {% endif %}
+}
+
+{% endfor %}
+
+function initialize_maps() {
+
+{% for incident in incidents %}
+
+initialize_{{incident.sequence_id}}();
+
+
+{% endfor %}
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize_maps);
+</script>
+
+
+
+<!--- for viewing... --->
+
+<div id="fr_view" style="clear:both" >
+
+{% for incident in incidents %} 
+<script>
+
+</script>
+
+
+
+<h1> {{ incident.sequence_id }} {{ incident.volunteer }} </h1>
+<div class="row-fluid">
+    <div style="margin-left:2em">
+{% if NOT_GOING_TO_HAPPEN %}
+    <div style="clear:both;"> {{incident.ts}} &nbsp; &nbsp; <form action="/incident/" method="POST">{% csrf_token %}<input type="hidden" name="action" value="mark_read" /><input type="hidden" name="incident_id" value="{{incident.id}}" /><input type="submit" value="Mark Read" /></form>
+{% endif %}
+ </div>
+    <div style="clear:both"></div>
+    <p> {{ incident.dispatcher_initial_description }} </p>
+<div class="row-fluid">
+<div class="span12" align="left">
+<button id="btn_page_auto" onClick="disposition_change('view');" class="btn btn-success">Page Volunteers</button>
+<button id="btn_assign_volunteers" onClick="disposition_change('file');" class="btn btn-focus">Assign Volunteers</button>
+</div>
+</div>
+<br />
+{% if incident.latitude %}
+    <p>Lat/Lon: {{ incident.latitude }}/{{ incident.longitude }}</p>
+
+<div style="clear:both;" class="map_canvas" id="map{{incident.sequence_id}}" ></div>
+{% endif %}
+</div>
+
+
+
+</div>
+
+
+{% endfor %}
+
+</div>
+
+	{% endif %}
+
+
+
+{% else %}
+Sorry, you must log in.
+{% endif %}
+
+
+
+
+</body>

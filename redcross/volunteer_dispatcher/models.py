@@ -47,10 +47,12 @@ class IncidentType(models.Model) :
 		return self.name
 
 class Incident(HasLocation) :
+	volunteer = models.ForeignKey(Volunteer, blank=True, null=True)
 	incident_type = models.ForeignKey(IncidentType)
 	dispatcher_initial_description = models.TextField()
 	required_responders = models.IntegerField(default=1)
 	required_trainees = models.IntegerField(default=1)
+	is_open = models.BooleanField(default=True)
 
 	def __unicode__(self) :
 		return '%s: %s' % (str(self.incident_type), self.dispatcher_initial_description[0:50])
