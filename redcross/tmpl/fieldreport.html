@@ -13,9 +13,23 @@ function disposition_change(disp) {
   if (disp == "view") {
     $('#fr_view').show();
     $('#fr_file').hide();
+
+    $("#btn_view").attr({
+      "class": 'btn btn-success'
+    });
+    $("#btn_file").attr({
+      "class": 'btn btn-focus'
+    });
   } else if (disp == "file") {
     $('#fr_view').hide();
     $('#fr_file').show();
+
+    $("#btn_view").attr({
+      "class": 'btn btn-focus'
+    });
+    $("#btn_file").attr({
+      "class": 'btn btn-success'
+    });
   }
 }
 
@@ -66,8 +80,8 @@ google.maps.event.addDomListener(window, 'load', initialize_{{fieldreport.sequen
 </script>
 <div class="row-fluid">
 <div class="span12" align="right">
-<button onClick="disposition_change('view');" class="btn btn-focus">Field Reports</button>
-<button onClick="disposition_change('file');" class="btn btn-success">Create a Report</button>
+<button id="btn_view" onClick="disposition_change('view');" class="btn btn-focus">Field Reports</button>
+<button id="btn_file" onClick="disposition_change('file');" class="btn btn-success">Create a Report</button>
 </div>
 </div>
 
