@@ -15,6 +15,7 @@ import models
 import decimal
 import pprint
 import traceback
+import datetime
 
 def user_properties(request, csrf_unsafe=False) :
   user = None
@@ -95,6 +96,7 @@ def add_open_fieldreports(d) :
     reports.reverse()
     for i in range(len(reports)) :
       reports[i].sequence_id = i + 1
+      reports[i].ts=datetime.datetime.fromtimestamp(reports[i].ts);
     d['fieldreports'] = reports
 
 @csrf_protect
