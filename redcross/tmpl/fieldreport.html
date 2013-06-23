@@ -91,7 +91,9 @@ google.maps.event.addDomListener(window, 'load', initialize_{{fieldreport.sequen
     <div style="clear:both"></div>
     <p> {{ fieldreport.description }} </p>
     <p>Lat/Lon: {{ fieldreport.latitude }}/{{ fieldreport.longitude }}</p>
+{% if fieldreport.latitude%}
 <div class="map_canvas" id="map{{fieldreport.sequence_id}}" ></div>
+{% endif %}
 </div>
 
 
