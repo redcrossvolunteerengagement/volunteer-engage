@@ -3,7 +3,7 @@ from django.template import RequestContext, Context, loader
 from django.views.decorators.csrf import csrf_protect
 import django.contrib.auth
 
-
+import time
 import models
 import decimal
 import pprint
@@ -60,7 +60,7 @@ def fieldreports_home(request) :
   d = {"title" : "Field Reports"}
   d['user_properties'] = user_properties(request)
 
-  return render_respond(request, "tmpl/fieldreports_home.html", d)
+  return render_respond(request, "tmpl/fieldreport.html", d)
 
 @csrf_protect
 def fieldreports_mark_read(request) :
@@ -74,7 +74,7 @@ def fieldreports_mark_read(request) :
   else :
     d["title"] = "Error, no permissions"
 
-  return render_respond(request, "tmpl/fieldreports_home.html", d)
+  return render_respond(request, "tmpl/fieldreport.html", d)
 
 @csrf_protect
 def fieldreports_create(request) :
@@ -103,6 +103,11 @@ def fieldreports_create(request) :
     fieldreport.latitude = latitude
     fieldreport.longitude = longitude
     fieldreport.description = description
+    fieldreport.save()
+
+    d['message'] = 'Report filed'
+
+    return render_respond(request, "tmpl/fieldreport.html", d)
   except :
     print traceback.format_exc()
     return http.HttpResponse('Unhandled error', status=500)

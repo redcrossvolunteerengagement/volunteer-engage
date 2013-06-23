@@ -1,6 +1,9 @@
+import os
+
 from django.contrib import admin
 from django.conf.urls import patterns, include, url
 
+import django.views.static
 import volunteer_dispatcher.models
 import volunteer_dispatcher.views
 
@@ -20,6 +23,9 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'media'))}),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
