@@ -67,7 +67,18 @@ google.maps.event.addDomListener(window, 'load', initialize_maps);
 <div id="fr_view" style="clear:both" >
 
 {% for incident in incidents %} 
-<script>
+
+<form id="incident_page_form" action="/incidents/volunteer_dispatch_auto" method="POST" />
+<input type="hidden" id="incident_id" name="incident_id" value="" />
+{% csrf_token %}
+</form>
+<script type="text/javascript">
+
+
+function submit_auto_page(v) {
+  $("#incident_id").val(v);
+  $("#incident_page_form").submit();
+}
 
 </script>
 
@@ -84,7 +95,7 @@ google.maps.event.addDomListener(window, 'load', initialize_maps);
     <p> {{ incident.dispatcher_initial_description }} </p>
 <div class="row-fluid">
 <div class="span12" align="left">
-<button id="btn_page_auto" onClick="disposition_change('view');" class="btn btn-success">Page Volunteers</button>
+<button id="btn_page_auto" onClick="submit_auto_page({{ incident.id }});" class="btn btn-success">Page Volunteers</button>
 <button id="btn_assign_volunteers" onClick="disposition_change('file');" class="btn btn-focus">Assign Volunteers</button>
 </div>
 </div>

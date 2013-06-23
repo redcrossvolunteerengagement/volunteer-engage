@@ -1,3 +1,5 @@
+import sms_integration
+import coordinates
 from django import http
 from django.contrib import auth
 from django.template import RequestContext, Context, loader
@@ -109,18 +111,46 @@ def incidents_home(request) :
   if not d['user_properties']['is_dispatcher'] :
     return http.HttpResponse('Unauthorized', status=401)
 
-  if 'action' in request.POST :
-    if request.POST['action'] == 'dispatch_automatically' and 'incident_id' in request.POST :
+  add_open_incidents(d)
+
+  return render_respond(request, "tmpl/incident.html", d)
+
+@csrf_protect
+def volunteer_dispatch_auto(request) :
+  try :
+    d = {"title" : "Dispatched Incident"} # TODO make this say how many users were dispatched
+    d['user_properties'] = user_properties(request)
+
+    if not d['user_properties']['is_dispatcher'] :
+      return http.HttpResponse('Unauthorized', status=401)
+
+    if 'incident_id' in request.POST :
       # TODO handle bad value for field report id well
       incident_id = long(request.POST['incident_id'])
 
       # XXX this is incomplete change it
       incident = models.Incident.objects.get(id=incident_id)
 
-  add_open_incidents(d)
+      # inefficient XXX
+      all_volunteers = [v for v in list(models.Volunteer.objects.all()) if (v.cell_phone and v.latitude and v.longitude)]
+      print all_volunteers
+      # get fancy and sort this later and limit by the number of people wanted later, WHOOPS
+      #all_volunteers.sort(cmp=lambda a,b: int.__cmp__.
 
-  return render_respond(request, "tmpl/incident.html", d)
+      for v in all_volunteers :
+        cellnum = str(v.cell_phone)
 
+        print cellnum
+
+        notifier = sms_integration.Notifiers.get()
+        notifier.send(cellnum, ("You've been paged to an incident at %s, please call dispatch. Details: %s" % (incident.addr1, incident.dispatcher_initial_description))[0:120])
+
+    return None
+  except :
+    print traceback.format_exc()
+    return http.HttpResponse('Unhandled error', status=500)
+    
+  
 def add_open_fieldreports(d) :
   if not d['user_properties']['is_dispatcher'] :
     d['fieldreports'] = []
