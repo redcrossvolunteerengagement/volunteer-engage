@@ -2,11 +2,13 @@
 
 {% if user_properties.logged_in %}
 
+
 <!--- buttons for selecting disposition of page --->
 	{% if user_properties.is_dispatcher %}
-
+<script src="/site_media/moment/moment.js"></script>
+<link href="/site_media/googleapi/default.css" rel="stylesheet">
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript">
-
 function disposition_change(disp) {
   if (disp == "view") {
     $('#fr_view').show();
@@ -16,8 +18,52 @@ function disposition_change(disp) {
     $('#fr_file').show();
   }
 }
-</script>
 
+
+//$(document).ready(function(){
+//var temp=$("timestamp").text;
+//console.log(typeof(temp));
+//$('.timestamp').text(temp);
+
+//});
+
+{% for fieldreport in fieldreports %}
+
+function initialize_{{fieldreport.sequence_id}}() {
+  var mapOptions = {
+    zoom: 4,
+    center: new google.maps.LatLng({{ fieldreport.latitude }},{{ fieldreport.longitude }}),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  var map = new google.maps.Map(document.getElementById('map{{fieldreport.sequence_id}}'),
+      mapOptions);
+
+  var marker = new google.maps.Marker({
+    position: map.getCenter(),
+    map: map,
+    title: 'Click to zoom'
+  });
+
+  google.maps.event.addListener(map, 'center_changed', function() {
+    // 3 seconds after the center of the map has changed, pan back to the
+    // marker.
+    window.setTimeout(function() {
+      map.panTo(marker.getPosition());
+    }, 3000);
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    map.setZoom(8);
+    map.setCenter(marker.getPosition());
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize_{{fieldreport.sequence_id}});
+
+{% endfor %}
+
+</script>
 <div class="row-fluid">
 <div class="span12" align="right">
 <button onClick="disposition_change('view');" class="btn btn-focus">Field Reports</button>
@@ -30,18 +76,28 @@ function disposition_change(disp) {
 
 <div id="fr_view" style="clear:both" >
 
-
 {% for fieldreport in fieldreports %} 
+<script>
+//initialize();
 
-<div id="fieldreport_{{ fieldreport.id }}">
+</script>
 
-<h1> Report {{ fieldreport.sequence_id }} </h1>
-By: {{ fieldreport.volunteer }} 
-When: {{ fieldreport.ts }}
-Lat/Lon: {{ fieldreport.latitude }}/{{ fieldreport.longitude }}
-<p> {{ fieldreport.description }} </p>
+
+
+<h1> {{ fieldreport.sequence_id }} {{ fieldreport.volunteer }} </h1>
+<div class="row-fluid">
+    <div style="margin-left:2em">
+    <div>{{fieldreport.ts}}</div>
+    <div style="clear:both"></div>
+    <p> {{ fieldreport.description }} </p>
+    <p>Lat/Lon: {{ fieldreport.latitude }}/{{ fieldreport.longitude }}</p>
+<div class="map_canvas" id="map{{fieldreport.sequence_id}}" ></div>
+</div>
+
+
 
 </div>
+
 
 {% endfor %}
 
@@ -55,8 +111,11 @@ Lat/Lon: {{ fieldreport.latitude }}/{{ fieldreport.longitude }}
 	<h4>Field Report</h4>
 	<p>Input your crisis observations to our form and connect with Disaster Action Team (DAT) dispatchers to ensure an effective Red Cross response. Use your judgment and volunteer training to ensure that all relevant situational information is recorded and off-topic points are avoided. By quickly passing along your observations to dispatchers, you will not only facilitate their coordination of the disaster response but also enable other volunteers who are in the area to contribute towards the effort. This feature will ensure that whether you are participating in a crisis response or happen to encounter a crisis situation unfolding, your vital knowledge will not be lost.</p>
 	<form method="post" action="/fieldreport/create">
+        <input type="hidden" id="latinput" name="latitude" value="" />
+        <input type="hidden" id="loninput" name="longitude" value="" />
 	{% csrf_token %}
 	<textarea rows="5" class="span12" name="description" id="description"></textarea>
+
 	<div style="clear:both;"></div>
 	{% if message %}
 	<div class="alert alert-success"> {{ message }} </div>
@@ -70,7 +129,29 @@ Lat/Lon: {{ fieldreport.latitude }}/{{ fieldreport.longitude }}
 
 <script type="text/javascript" >
 disposition_change('{{ fieldreport_disposition }}');
+
+function getLocation()
+  {
+  if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(handlePosition);
+    }
+  else
+    {
+    alert("oh no, no geo locate :( ");
+    }
+  };
+
+function handlePosition(position) {
+  alert("hi: " + position.latitude);
+  $("#latinput").val(position.latitude);
+  $("#loninput").val(position.longitude);
+};
+
+getLocation();
 </script>
+
+
 	{% endif %}
 
 

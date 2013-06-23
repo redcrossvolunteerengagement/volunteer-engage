@@ -15,6 +15,7 @@ import models
 import decimal
 import pprint
 import traceback
+import datetime
 
 def user_properties(request, csrf_unsafe=False) :
   user = None
@@ -95,6 +96,7 @@ def add_open_fieldreports(d) :
     reports.reverse()
     for i in range(len(reports)) :
       reports[i].sequence_id = i + 1
+      reports[i].ts=datetime.datetime.fromtimestamp(reports[i].ts);
     d['fieldreports'] = reports
 
 @csrf_protect
@@ -134,8 +136,12 @@ def fieldreports_create_core(request, csrf_unsafe) :
     latitude = None
     longitude = None
     try :
-      latitude = float(request.POST['latitude'])
-      longitude = float(request.POST['longitude'])
+      slat = request.POST['latitude']
+      if slat :
+        latitude = float(slat)
+      slon = request.POST['longitude']
+      if slon :
+        longitude = float(slon)
     except KeyError :
       print 'oh no, no location known :('
     except decimal.InvalidOperation :
