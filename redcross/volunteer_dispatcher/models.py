@@ -56,8 +56,8 @@ class Incident(HasLocation) :
 class FieldReport(models.Model) :
 	ts = models.BigIntegerField(blank=True, null=True)
 	volunteer = models.ForeignKey(Volunteer)
-	latitude = models.DecimalField(max_digits=10, decimal_places=6)
-	longitude = models.DecimalField(max_digits=10, decimal_places=6)
+	latitude = models.DecimalField(max_digits=10, decimal_places=6, blank=True, null=True)
+	longitude = models.DecimalField(max_digits=10, decimal_places=6, blank=True, null=True)
 	description = models.TextField()
 	read = models.BooleanField(default=False)
 
