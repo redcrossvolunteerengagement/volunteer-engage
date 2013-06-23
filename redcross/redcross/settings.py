@@ -1,5 +1,6 @@
 # Django settings for redcross project.
 
+import os, os.path
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -106,7 +107,7 @@ ROOT_URLCONF = 'redcross.urls'
 WSGI_APPLICATION = 'redcross.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '~/volunteer-engage/redcross'
+    os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -155,3 +156,5 @@ LOGGING = {
         },
     }
 }
+
+from local_settings import *
