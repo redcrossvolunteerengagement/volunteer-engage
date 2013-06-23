@@ -21,36 +21,32 @@ margin-top: 1em;
 
 <body>
 <div class="container">
-  <div class="navbar_login" style="margin-top:1em">
-    <div class="navbar">
-      <div class="navbar-inner">
-        <ul class="nav" align="left">
-          {% if not user_properties.logged_in %}
-          <li class="active" onclick="window.location.href = '/login/';" ><a href="#" style="color:blue;">Login</a></li>
-          {% else %}
-            <li class="active" onclick="window.location.href = '/logout/';" ><a href="#" style="color:blue;">Logout</a></li>
-          {% endif %} 
-        </ul>
-      </div>
-    </div>
-  </div>
+ 
   <div align="middle" id="centerpic" onClick="window.location.href = '/';"><img src="/site_media/img/Flag_of_the_Red_Cross.svg" align="middle" width="200px" height="200px" stroke="red"/> </div>
   <div align="middle" style="margin-top:-1em">
   <b>REDCROSS</b></br>
   Connect with Fellow Volunteers and Dispatch
   </div>
 
-{% if user_properties.logged_in %}
+
 <div class="navbar" style="margin-top:1em">
 <div class="navbar">
   <div class="navbar-inner">
     <ul class="nav" align="center">
+          {% if not user_properties.logged_in %}
+          <li class="active" onclick="window.location.href = '/login/';" ><a href="#" style="color:blue;">Login</a></li>
+          {% else %}
+            <li class="active" onclick="window.location.href = '/logout/';" ><a href="#" style="color:blue;">Logout</a></li>
+          {% endif %} 
+
+{% if user_properties.logged_in %}
       <li ><a href="/fieldreport/">Field Report</a></li>
       <li><a href="#" align='center'>Incident Log</a></li>
       {% if user_properties.is_dispatcher %}
       <li><a href="#">Dispatch an Incident</a></li>
       {% endif %}
+{% endif %}
     </ul>
   </div>
 </div>
-{% endif %}
+
