@@ -118,6 +118,8 @@ def incidents_home(request) :
 @csrf_protect
 def volunteer_dispatch_auto(request) :
   try :
+    n_paged = 0
+
     d = {"title" : "Dispatched Incident"} # TODO make this say how many users were dispatched
     d['user_properties'] = user_properties(request)
 
@@ -137,6 +139,8 @@ def volunteer_dispatch_auto(request) :
       # get fancy and sort this later and limit by the number of people wanted later, WHOOPS
       #all_volunteers.sort(cmp=lambda a,b: int.__cmp__.
 
+
+
       for v in all_volunteers :
         cellnum = str(v.cell_phone)
 
@@ -144,8 +148,10 @@ def volunteer_dispatch_auto(request) :
 
         notifier = sms_integration.Notifiers.get()
         notifier.send(cellnum, ("You've been paged to an incident at %s, please call dispatch. Details: %s" % (incident.addr1, incident.dispatcher_initial_description))[0:120])
+        n_paged += 1
 
-    return None
+    d['n_paged'] = n_paged
+    return render_respond(request, "tmpl/paged.html", d)
   except :
     print traceback.format_exc()
     return http.HttpResponse('Unhandled error', status=500)
