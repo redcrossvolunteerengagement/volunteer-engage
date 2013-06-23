@@ -2,16 +2,20 @@
 {% load url from future %}
 <html>
 <body>
-    <h1>The Red Cross Volunteers' Page</h1>
+<div class="container">
+	<div class="row-fluid">
+		<div class="span6 offset3">
     <form action= {% url "login" %} method="post">
     {% csrf_token %}
         {{form.username.label_tag}}{{form.username}}
         {{form.password.label_tag}}{{form.password}}
-        <input type="submit" id="submit" name="submit" value="Sign in" />
+        <div style="clear: both;" />
+        <input type="submit" id="submit" name="submit" value="Sign in" /> </div>
         <input type="hidden" name="next" value="{{ next }}" />   
     {%if form.errors %}
     <p> Invalid username/password combination, please try again </p>
     {% endif %}     
     </form>
     <a href="password_reset/" id="forgot"> forgot username/password</a><br />
+</div></div></div>
 </body>
