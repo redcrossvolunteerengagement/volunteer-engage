@@ -26,6 +26,8 @@ margin-top: 1em;
         <b>REDCROSS</b></br>
         Connect with Fellow Volunteers and Dispatch
         </div>
+
+{% if user_properties.logged_in %}
 <div class="navbar" style="margin-top:1em">
 <div class="navbar">
   <div class="navbar-inner">
@@ -36,4 +38,4 @@ margin-top: 1em;
     </ul>
   </div>
 </div>
-
+{% endif %}
