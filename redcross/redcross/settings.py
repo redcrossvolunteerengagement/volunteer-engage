@@ -1,6 +1,7 @@
 # Django settings for redcross project.
 
 import os, os.path
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
