@@ -134,6 +134,7 @@ google.maps.event.addDomListener(window, 'load', initialize_maps);
 	<form method="post" action="/fieldreport/create">
         <input type="hidden" id="latinput" name="latitude" value="" />
         <input type="hidden" id="loninput" name="longitude" value="" />
+	<input type="hidden" id="uuid" name="uuid" value="" />
 	{% csrf_token %}
 	<textarea rows="5" class="span12" name="description" id="description"></textarea>
 
@@ -145,6 +146,9 @@ google.maps.event.addDomListener(window, 'load', initialize_maps);
 	<button type="submit" class="btn btn-primary">Submit</button>
 
 	</form>
+	<script type="text/javascript" >
+	$("#uuid").val(uuid.v4());
+	</script>
 
 	</div>
 </div>

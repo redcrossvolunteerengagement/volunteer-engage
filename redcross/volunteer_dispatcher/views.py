@@ -1,6 +1,7 @@
 import sms_integration
 import coordinates
 from django import http
+import django.db
 from django.contrib import auth
 from django.template import RequestContext, Context, loader
 
@@ -18,6 +19,13 @@ import decimal
 import pprint
 import traceback
 import datetime
+
+import uuid
+import re
+UUID_RE = re.compile('^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$')
+
+def uuidgen() :
+  return str(uuid.uuid4())
 
 def user_properties(request, csrf_unsafe=False) :
   user = None
@@ -195,15 +203,29 @@ def fieldreports_mark_read(request) :
   return render_respond(request, "tmpl/fieldreport.html", d)
 
 @csrf_exempt
-def fieldreports_create_auth(request) :
-  return fieldreports_create_core(request, True)
+def fieldreports_create_api(request) :
+  return fieldreports_create_core(request, True, True)
 
 @csrf_protect
 def fieldreports_create(request) :
-  return fieldreports_create_core(request, False)
+  return fieldreports_create_core(request, False, False)
 
-def fieldreports_create_core(request, csrf_unsafe) :
+def fieldreports_create_core(request, csrf_unsafe, uuid_required) :
   pprint.pprint(request.POST) 
+
+  uuid_input = None
+  try :
+    uuid_i = request.POST['uuid']
+    if UUID_RE.match(uuid_i) :
+      uuid_input = uuid_i
+  except KeyError :
+    pass
+
+  if not uuid_input :
+    if uuid_required :
+      return http.HttpResponse('UUID invalid or not supplied when required', status=403)
+    else :
+      uuid_input = uuidgen()
 
   try :
     d = {}
@@ -228,16 +250,22 @@ def fieldreports_create_core(request, csrf_unsafe) :
     except decimal.InvalidOperation :
       return http.HttpResponse("Bad input, could not parse the decimal value for lat or lon", status=400)
 
-    fieldreport = models.FieldReport()
-    fieldreport.volunteer = d['user_properties']['volunteer']
-    fieldreport.ts = long(time.time())
-    fieldreport.latitude = latitude
-    fieldreport.longitude = longitude
-    fieldreport.description = description
-    fieldreport.save()
+    try :
+      fieldreport = models.FieldReport()
+      fieldreport.volunteer = d['user_properties']['volunteer']
+      fieldreport.uuid = uuid_input
+      fieldreport.ts = long(time.time())
+      fieldreport.latitude = latitude
+      fieldreport.longitude = longitude
+      fieldreport.description = description
+      fieldreport.save()
 
-    d['message'] = 'Report filed'
-    d['fieldreport_disposition'] = 'file'
+      d['message'] = 'Report filed'
+      d['fieldreport_disposition'] = 'file'
+    except django.db.IntegrityError :
+      d['message'] = 'Report not filed, it was a duplicate'
+      d['fieldreport_disposition'] = 'file'
+    
     add_open_fieldreports(d)
     return render_respond(request, "tmpl/fieldreport.html", d, do_csrf=True)
   except :
