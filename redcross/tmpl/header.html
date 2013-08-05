@@ -38,10 +38,10 @@ margin-top: 1em;
 {% if user_properties.logged_in %}
       <li ><a href="/">About</a></li>
       <li ><a href="/fieldreport/">Field Report</a></li>
-      <li><a href="#" align='center'>Incident Log</a></li>
+      <!--- this disabled until we decide to add dispatching back as a feature <li><a href="#" align='center'>Incident Log</a></li>
       {% if user_properties.is_dispatcher %}
       <li><a href="/incidents/">Dispatch an Incident</a></li>
-      {% endif %}
+      {% endif %} --->
 {% endif %}
 
           {% if not user_properties.logged_in %}
