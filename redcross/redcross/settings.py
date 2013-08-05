@@ -1,7 +1,6 @@
 # Django settings for redcross project.
 
 import os, os.path
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -13,7 +12,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'redcross_volunteer',                      # Or path to database file if using sqlite3.
         'USER': 'volunteer',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
