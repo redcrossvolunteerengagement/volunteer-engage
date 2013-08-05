@@ -218,10 +218,10 @@ def fieldreports_create_core(request, csrf_unsafe) :
     longitude = None
     try :
       slat = request.POST['latitude']
-      if slat :
-        latitude = float(slat)
       slon = request.POST['longitude']
-      if slon :
+
+      if slat and slon :
+        latitude = float(slat)
         longitude = float(slon)
     except KeyError :
       print 'oh no, no location known :('
